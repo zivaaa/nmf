@@ -30,7 +30,7 @@ export default class ActionManager {
 
 
     /**
-     * @return {ActionManager}
+     * @return {nmf.ActionManager}
      */
     registerAll() {
         const actions = this._app.ctx.fetch(BIND_ACTIONS);
@@ -53,7 +53,7 @@ export default class ActionManager {
 
     /**
      * @param {nmf.Action} action
-     * @return {ActionManager}
+     * @return {nmf.ActionManager}
      */
     register(action) {
         if (this.doesActionRegistered(action.name)) {

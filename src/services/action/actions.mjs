@@ -9,6 +9,7 @@ export const defaultActions = [
         name: "default",
         async fn(app) {
            await app.fire("list");
+           return true;
         }
     },
     {
@@ -24,6 +25,7 @@ export const defaultActions = [
                 }
             }
             console.log("");
+            return true;
         }
     }
 ];

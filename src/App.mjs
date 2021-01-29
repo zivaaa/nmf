@@ -198,7 +198,10 @@ export class App {
     async start(action) {
         await this.em.emit(EVENT_APP_START);
         const actionName = !action ? this.tools.getCurrentActionName() : action;
-        await this.fire(actionName);
+        const needStop = await this.fire(actionName);
+        if (needStop) {
+            await this.stop(false);
+        }
     }
 
 
@@ -220,13 +223,14 @@ export class App {
         }
 
         try {
-           await am.fire(action);
+            return await am.fire(action);
         } catch (e) {
             console.error(e);
             await this._emitter.emit(EVENT_APP_ERROR, e);
             await this.stop(true);
         }
     }
+
 
     /**
      * @return {Emitter}
