@@ -11,6 +11,9 @@ import path from "path";
 export class Env {
     config = {};
 
+    /**
+     * @param {string} root - where to find .env
+     */
     constructor(root) {
         const fullPath = path.join(root, ".env");
         this.config = env.config({ path: fullPath });

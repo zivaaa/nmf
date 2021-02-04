@@ -9,7 +9,7 @@ import {
     EVENT_APP_PRE_BOOT,
     EVENT_APP_START
 } from "./events.mjs";
-import {BIND_ARGV} from "./services/env/consts.mjs";
+import {BIND_ARGV, BIND_CONFIG_RESOLVER} from "./services/env/consts.mjs";
 import {BIND_ACTION_MANAGER, BIND_ACTIONS} from "./services/action/consts.mjs";
 import {EnvProvider} from "./services/env/providers/EnvProvider.mjs";
 import {ActionProvider} from "./services/action/providers/ActionProvider.mjs";
@@ -91,6 +91,7 @@ export class App {
         this._bootstrapper = new Bootstrapper(this);
         this._context = new Context();
         this._emitter = new Emitter();
+        this.ctx.bind(BIND_CONFIG_RESOLVER, this._configResolver);
     }
 
     /**
@@ -204,10 +205,28 @@ export class App {
         }
     }
 
+    /**
+     * @param {boolean} fail
+     */
+    kill(fail = false) {
+        process.exit(fail ? 1 : 0)
+    }
 
     async stop(fail = false) {
         await this.em.emit(EVENT_APP_EXIT);
-        process.exit(fail ? 1 : 0)
+    }
+
+    /**
+     * @param fail
+     * @return {Promise<void>}
+     */
+    async stopAndKill(fail) {
+        try {
+            await this.stop(fail);
+        } catch (e) {
+            console.error(e);
+        }
+        this.kill(fail);
     }
 
     /**

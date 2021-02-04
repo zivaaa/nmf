@@ -1,4 +1,4 @@
-import {BIND_ARGV, BIND_ENV} from "../consts.mjs";
+import {BIND_ARGV, BIND_CONFIG_RESOLVER, BIND_ENV, BIND_ENV_PATH} from "../consts.mjs";
 import {Env} from "../Env.mjs";
 import {Argv} from "../Argv.mjs";
 
@@ -8,7 +8,9 @@ import {Argv} from "../Argv.mjs";
 export const EnvProvider = {
     async bind(app) {
         const env = this.envClass();
-        app.ctx.bind(BIND_ENV, new env(app.root))
+        const resolver = app.ctx.fetch(BIND_CONFIG_RESOLVER);
+        const envPath = resolver.envPath ? resolver.envPath : process.env.ENV_PATH;
+        app.ctx.bind(BIND_ENV, new env(envPath ? envPath : app.root))
 
         const argv = this.argvClass();
         app.ctx.bind(BIND_ARGV, new argv())
