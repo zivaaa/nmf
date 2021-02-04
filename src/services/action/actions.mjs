@@ -1,6 +1,8 @@
 import * as types from "../../types.mjs";
 import {BIND_ACTION_MANAGER} from "./consts.mjs";
 
+
+
 /**
  * @type {nmf.Action[]}
  */
@@ -8,8 +10,8 @@ export const defaultActions = [
     {
         name: "default",
         async fn(app) {
-           await app.fire("list");
-           return true;
+            await app.fire("list");
+            return true;
         }
     },
     {
