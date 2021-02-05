@@ -59,4 +59,14 @@ export class Context {
         return this.s.has(key);
     }
 
+
+    /**
+     * clear data
+     * @return {nmf.Context}
+     */
+    clear() {
+        this.s = new Map();
+        return this;
+    }
+
 }

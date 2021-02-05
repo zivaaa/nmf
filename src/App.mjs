@@ -171,6 +171,7 @@ export class App {
             console.error(e);
             await this.em.emit(EVENT_APP_ERROR, e);
             await this.stop(true);
+            throw e;
         }
     }
 
