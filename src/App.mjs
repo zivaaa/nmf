@@ -210,6 +210,7 @@ export class App {
         } catch (e) {
             console.error(e);
             await this._emitter.emit(EVENT_APP_ERROR, e);
+            needStop = true;
         }
 
         if (needStop) {
