@@ -1,4 +1,4 @@
-import {BIND_ACTIONS} from "./consts.mjs";
+import {BIND_ACTIONS, EVENT_ACTION_FIRE} from "./consts.mjs";
 import {defaultActions} from "./actions.mjs";
 
 /**
@@ -66,15 +66,17 @@ export default class ActionManager {
 
     /**
      * @param {string} actionName
+     * @param [args]
      * @returns {Promise<void>}
      */
-    async fire(actionName) {
+    async fire(actionName, ...args) {
         if (!this.doesActionRegistered(actionName)) {
             throw new Error(`unknown action - ${actionName}`);
         }
 
         const action = this.getAction(actionName);
-        return await action.fn(this._app);
+        await this._app.em.emit(EVENT_ACTION_FIRE, action.name, ...args);
+        return await action.fn(this._app, ...args);
     }
 
 

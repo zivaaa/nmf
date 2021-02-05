@@ -120,13 +120,14 @@ export class App {
 
     /**
      * полностью загрузить и выполнить поставленную в конфиге задачу
-     * @param {string|nmf.Action|null} action
+     * @param {string|nmf.Action|null} [action]
+     * @param [args]
      * @return {Promise<void>}
      */
-    async exec(action = null) {
+    async exec(action = null, ...args) {
         try {
             await this.boot();
-            await this.start(action);
+            await this.start(action, ...args);
         } catch (e) {
             console.error(e);
             throw e;
@@ -193,14 +194,24 @@ export class App {
     }
 
     /**
-     * прочитать и выполнить задачу
+     * fire passed (or action from command line args) action, check if need to stop
+     *
      * @param {nmf.Action|string|null} [action]
+     * @param [args]
      * @return {Promise<void>}
      */
-    async start(action) {
-        await this.em.emit(EVENT_APP_START);
+    async start(action, ...args) {
         const actionName = !action ? this.tools.getCurrentActionName() : action;
-        const needStop = await this.fire(actionName);
+        await this.em.emit(EVENT_APP_START, actionName, ...args);
+
+        let needStop = false;
+        try {
+            needStop = await this.fire(actionName, ...args);
+        } catch (e) {
+            console.error(e);
+            await this._emitter.emit(EVENT_APP_ERROR, e);
+        }
+
         if (needStop) {
             await this.stop(false);
         }
@@ -233,22 +244,17 @@ export class App {
     /**
      * запустить задачу
      * @param {nmf.Action|string|undefined} action
+     * @param [args]
      * @return {Promise<void>}
      */
-    async fire(action) {
+    async fire(action,...args) {
         const am = /** @type {nmf.ActionManager} */ this.ctx.fetch(BIND_ACTION_MANAGER);
 
         if (typeof action === "object") {
             am.register(action);
         }
 
-        try {
-            return await am.fire(action);
-        } catch (e) {
-            console.error(e);
-            await this._emitter.emit(EVENT_APP_ERROR, e);
-            await this.stop(true);
-        }
+        return await am.fire(action, ...args);
     }
 
 

@@ -19,7 +19,7 @@
  * @type {object}
  * @property {string} name
  * @property {string} [description]
- * @property {nmf.ActionFn} fn
+ * @property {nmf.ActionFn,args...} fn
  */
 
 /**

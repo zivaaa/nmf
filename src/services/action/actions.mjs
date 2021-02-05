@@ -23,8 +23,9 @@ export const defaultActions = [
             for (let act of am.all()) {
                 console.log(`# ${act.name}`);
                 if (act.description) {
-                    console.log(`## ${act.description}`);
+                    console.log(`|-> ${act.description}`);
                 }
+                console.log(``);
             }
             console.log("");
             return true;
