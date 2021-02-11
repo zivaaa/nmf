@@ -10,7 +10,7 @@ export const EnvProvider = {
         const env = this.envClass();
         const resolver = app.ctx.fetch(BIND_CONFIG_RESOLVER);
         const envPath = resolver.envPath ? resolver.envPath : process.env.ENV_PATH;
-        app.ctx.bind(BIND_ENV, new env(envPath ? envPath : app.root))
+        app.ctx.bind(BIND_ENV, new env(envPath ? envPath : app.root, process.env.NODE_ENV || "production"))
 
         const argv = this.argvClass();
         app.ctx.bind(BIND_ARGV, new argv())

@@ -1,5 +1,6 @@
-import env from 'dotenv';
+import env from 'dotenv-flow';
 import path from "path";
+import fs from "fs";
 
 /**
  * @namespace nmf
@@ -13,17 +14,20 @@ export class Env {
 
     /**
      * @param {string} root - where to find .env
+     * @param {string} mode - where to find .env[mode]
      */
-    constructor(root) {
-        const fullPath = path.join(root, ".env");
-        this.config = env.config({ path: fullPath });
-        if (!this.config) {
-            throw new Error(`${fullPath} not found`);
-        }
+    constructor(root, mode = "") {
+        this.load(root, mode);
+    }
 
-        if (this.config.error) {
-            throw this.config.error;
+    load(root, mode = "") {
+        const config = env.config({ path: root, node_env: mode });
+        if (config.error) {
+            console.warn(config.error);
         }
+        // console.log(process.env)
+        console.log(`VAR = ${this.get("VAR", "none")}`)
+
     }
 
     /**
