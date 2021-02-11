@@ -20,14 +20,15 @@ export class Env {
         this.load(root, mode);
     }
 
+    /**
+     * @param root
+     * @param mode
+     */
     load(root, mode = "") {
         const config = env.config({ path: root, node_env: mode });
         if (config.error) {
             console.warn(config.error);
         }
-        // console.log(process.env)
-        console.log(`VAR = ${this.get("VAR", "none")}`)
-
     }
 
     /**
