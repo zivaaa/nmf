@@ -20,6 +20,7 @@ export const defaultActions = [
             const am = /** @type {nmf.ActionManager} */ app.ctx.fetch(BIND_ACTION_MANAGER);
             console.log("### AVAILABLE ACTIONS ###");
             console.log("");
+            console.log(process.env.NODE_ENV);
             for (let act of am.all()) {
                 console.log(`# ${act.name}`);
                 if (act.description) {
